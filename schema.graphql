@@ -1,0 +1,45 @@
+type Query {
+    game(id: ID!): Game
+}
+
+type Mutation {
+    startGame(teams: [TeamInput!]!, options: OptionsInput = null): Game
+}
+
+input TeamInput {
+    name: String!
+    members: [String!]!
+}
+
+input OptionsInput {
+    "Round time in seconds"
+    roundTime: Int!
+}
+
+type Team {
+    name: String!
+    members: [String!]!
+}
+
+type Game {
+    id: ID!
+    teams: [Team!]!
+    rounds (last: Int): [Round!]!
+}
+
+type Round {
+    id: ID
+    task: Task!
+}
+
+type Task {
+    action: Action!
+    word: String!
+    points: Int!
+}
+
+enum Action {
+    EXPLAIN
+    DRAW
+    SHOW
+}
