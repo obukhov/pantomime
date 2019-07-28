@@ -1,87 +1,93 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
 type Query {
-    game(id: ID!): Game
+#    "Get game by id"
+#    game(id: ID!): Game
     "List of games in reverse chronological order"
     games(limit: Int!, after: String): [Game!]!
 }
 
 type Mutation {
-    "Start the game with provided team setup"
-    startGame(teams: [TeamInput!]!, options: OptionsInput = null): Game
-    "Moves round from status PENDING to STARTED"
-    startRound(gameId: ID!, roundId: ID!, difficulty: Difficulty!): Round
-    "Moves round from status STARTED or FINISHED to CLOSED or change result of CLOSED round"
-    setRoundResult(gameId: ID!, roundId: ID!, successfull: Boolean!): Round
+#    "Start the game with provided team setup"
+#    startGame(teams: [TeamInput!]!, options: OptionsInput = null): Game
+#    "Moves round from status PENDING to STARTED"
+#    startRound(gameId: ID!, roundId: ID!, difficulty: Difficulty!): Round
+#    "Moves round from status STARTED or FINISHED to CLOSED or change result of CLOSED round"
+#    setRoundResult(gameId: ID!, roundId: ID!, successfull: Boolean!): Round
 }
 
-input TeamInput {
-    name: String!
-    members: [String!]!
-}
+#input TeamInput {
+#    name: String!
+#    members: [String!]!
+#}
 
-input OptionsInput {
-    "Round time in seconds"
-    roundTime: Int!
-}
-
-type Options {
-    "Round time seconds"
-    roundTime: Int!
-}
-type Team {
-    name: String!
-    members: [String!]!
-    score: Int!
-}
-
+#input OptionsInput {
+#    "Round time in seconds"
+#    roundTime: Int!
+#}
+#
+#type Options {
+#    "Round time seconds"
+#    roundTime: Int!
+#}
+#type Team {
+#    name: String!
+#    members: [String!]!
+#    score: Int!
+#}
+#
 type Game {
     id: ID!
-    teams: [Team!]!
-    rounds (last: Int): [Round!]!
-    options: Options!
-    startedAt: String!
-    finished: Boolean!
+#    teams: [Team!]!
+#    rounds (last: Int): [Round!]!
+#    options: Options!
+#    startedAt: String!
+#    finished: Boolean!
 }
-
-type Round {
-    id: ID!
-    status: RoundStatus!
-    task: Task
-    startedAt: String
-    team: Team!
-    player: String!
-    "Null before played"
-    success: Boolean
-}
-
-enum RoundStatus {
-    "Before the task defined"
-    PENDING
-    "When the timer starts"
-    STARTED
-    "When the time is out"
-    FINISHED
-    "When the result is defined"
-    CLOSED
-    "If the team wasn't able to play"
-    SKIPPED
-}
-
-type Task {
-    action: Action!
-    difficulty: Difficulty!
-    word: String!
-}
-
-enum Difficulty {
-    "Gives you 3 points"
-    EASY
-    "Gives you 4 points"
-    NORMAL
-    "Gives you 5 points"
-    HARD
-}
-enum Action {
-    EXPLAIN
-    DRAW
-    SHOW
-}
+#
+#type Round {
+#    id: ID!
+#    status: RoundStatus!
+#    task: Task
+#    startedAt: String
+#    team: Team!
+#    player: String!
+#    "Null before played"
+#    success: Boolean
+#}
+#
+#enum RoundStatus {
+#    "Before the task defined"
+#    PENDING
+#    "When the timer starts"
+#    STARTED
+#    "When the time is out"
+#    FINISHED
+#    "When the result is defined"
+#    CLOSED
+#    "If the team wasn't able to play"
+#    SKIPPED
+#}
+#
+#type Task {
+#    action: Action!
+#    difficulty: Difficulty!
+#    word: String!
+#}
+#
+#enum Difficulty {
+#    "Gives you 3 points"
+#    EASY
+#    "Gives you 4 points"
+#    NORMAL
+#    "Gives you 5 points"
+#    HARD
+#}
+#enum Action {
+#    EXPLAIN
+#    DRAW
+#    SHOW
+#}

@@ -1,0 +1,25 @@
+version: '3.5'
+services:
+  app:
+    build:
+      context: .
+      target: build
+    image: pantomime-server
+    restart: unless-stopped
+    ports:
+      - "8088:8083"
+    environment:
+      DB_HOST: "db"
+    volumes:
+      - ./:/go/domain/github.com/obukhov/pantomime/server
+
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: teamspirit
+    ports:
+      - "33063:3306"
+    volumes:
+      - ./api-gateway/database:/docker-entrypoint-initdb.d/
