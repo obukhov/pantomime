@@ -18,8 +18,8 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: teamspirit
+      MYSQL_DATABASE: pantomime
     ports:
-      - "33063:3306"
+      - "33065:3306"
     volumes:
-      - ./api-gateway/database:/docker-entrypoint-initdb.d/
+      - ./database/dump:/docker-entrypoint-initdb.d/

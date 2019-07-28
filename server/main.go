@@ -4,6 +4,7 @@ import (
 	graphql "github.com/graph-gophers/graphql-go"
 	relay "github.com/graph-gophers/graphql-go/relay"
 	"github.com/obukhov/pantomime/server/resolver"
+	"github.com/joho/godotenv"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -13,6 +14,13 @@ func main() {
 	schemaString, err := getSchema("../schema.graphql")
 	if nil != err {
 		log.Fatal(err)
+	}
+
+	err = godotenv.Load("./.env", "./.env.dist")
+	if err != nil {
+		log.Print("Could not load .env file")
+	} else {
+		log.Print("Loaded .env file")
 	}
 
 	schema := graphql.MustParseSchema(

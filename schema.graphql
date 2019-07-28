@@ -11,24 +11,24 @@ type Query {
 }
 
 type Mutation {
-#    "Start the game with provided team setup"
-#    startGame(teams: [TeamInput!]!, options: OptionsInput = null): Game
+    "Start the game with provided team setup"
+    startGame(teams: [TeamInput!]!, options: OptionsInput): Game
 #    "Moves round from status PENDING to STARTED"
 #    startRound(gameId: ID!, roundId: ID!, difficulty: Difficulty!): Round
 #    "Moves round from status STARTED or FINISHED to CLOSED or change result of CLOSED round"
 #    setRoundResult(gameId: ID!, roundId: ID!, successfull: Boolean!): Round
 }
 
-#input TeamInput {
-#    name: String!
-#    members: [String!]!
-#}
+input TeamInput {
+    name: String!
+    members: [String!]!
+}
 
-#input OptionsInput {
-#    "Round time in seconds"
-#    roundTime: Int!
-#}
-#
+input OptionsInput {
+    "Round time in seconds"
+    roundTime: Int!
+}
+
 #type Options {
 #    "Round time seconds"
 #    roundTime: Int!
