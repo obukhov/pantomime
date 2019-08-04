@@ -1,17 +1,19 @@
 package main // import "github.com/obukhov/pantomime/server"
 
 import (
-	graphql "github.com/graph-gophers/graphql-go"
-	relay "github.com/graph-gophers/graphql-go/relay"
-	"github.com/obukhov/pantomime/server/resolver"
+	"fmt"
+	"github.com/graph-gophers/graphql-go"
+	"github.com/graph-gophers/graphql-go/relay"
 	"github.com/joho/godotenv"
+	"github.com/obukhov/pantomime/server/resolver"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
-	schemaString, err := getSchema("../schema.graphql")
+	schemaString, err := getSchema("./schema.graphql")
 	if nil != err {
 		log.Fatal(err)
 	}
@@ -33,8 +35,9 @@ func main() {
 
 	http.Handle("/query", &relay.Handler{Schema: schema})
 
-	log.Println("Start listening on 8083...")
-	log.Fatal(http.ListenAndServe(":8083", nil))
+	serverPort := os.Getenv("SERVER_PORT")
+	log.Println(fmt.Sprintf("Start listening on %s...", serverPort))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", serverPort), nil))
 }
 
 func getSchema(path string) (string, error) {

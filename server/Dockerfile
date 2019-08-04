@@ -7,13 +7,13 @@ COPY . .
 RUN export GO111MODULE=on && go build -o /go/bin/server
 
 EXPOSE 80
-CMD ["/go/src/github.com/obukhov/pantomime/server"]
+CMD ["/go/bin/server"]
 
 FROM alpine AS deploy
 RUN apk add --no-cache ca-certificates
 WORKDIR /app
-COPY --from=build /go/bin/api-gateway /app/
-COPY --from=build /go/src/github.com/obukhov/teamspirit/api-gateway/schema.graphql /app/
+COPY --from=build /go/bin/server /app/
+COPY --from=build /go/src/github.com/obukhov/pantomime/server/schema.graphql /app/
 EXPOSE 80
 
-CMD ["/app/api-gateway"]
+CMD ["/app/server"]

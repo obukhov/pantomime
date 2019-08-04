@@ -2,16 +2,25 @@ version: '3.5'
 services:
   app:
     build:
-      context: .
+      context: server/.
       target: build
     image: pantomime-server
     restart: unless-stopped
     ports:
-      - "8088:8083"
+      - "8088:80"
     environment:
       DB_HOST: "db"
+      SERVER_PORT: "80"
     volumes:
       - ./:/go/domain/github.com/obukhov/pantomime/server
+    labels:
+      - "traefik.frontend.rule=Host:api.pantomime.local"
+      - "traefik.docker.network=dclg-hub-traefik"
+    extra_hosts:
+      - "api.pantomime.local:127.0.0.1"
+    networks:
+      - dclg-hub
+      - pantomime-default
 
   db:
     image: mysql:5.7
@@ -23,3 +32,50 @@ services:
       - "33065:3306"
     volumes:
       - ./database/dump:/docker-entrypoint-initdb.d/
+    networks:
+      - pantomime-default
+
+  authn-redis:
+    image: redis
+    networks:
+      - pantomime-default
+
+  authn-db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: authn
+    ports:
+      - "33066:3306"
+    volumes:
+      - ./database/dump:/docker-entrypoint-initdb.d/
+    networks:
+      - pantomime-default
+
+  authn-server:
+    image: keratin/authn-server:latest
+    ports:
+      - "7002:3000"
+    environment:
+      - APP_DOMAINS
+      - AUTHN_URL
+      - SECRET_KEY_BASE
+      - DATABASE_URL=mysql://authn-db/authn
+      - REDIS_URL=redis://authn-redis:6379
+    depends_on:
+      - authn-redis
+      - authn-db
+    labels:
+      - "traefik.frontend.rule=Host:auth.pantomime.local"
+      - "traefik.docker.network=dclg-hub-traefik"
+    extra_hosts:
+      - "auth.pantomime.local:127.0.0.1"
+    networks:
+      - pantomime-default
+
+networks:
+  pantomime-default: ~
+  dclg-hub:
+    external:
+      name: dclg-hub-traefik
